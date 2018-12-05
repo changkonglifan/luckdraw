@@ -1,0 +1,12 @@
+{
+    "data":[
+        {
+            "name":"徐洋",
+            "pic": "./pics/xuyang.jpg"
+        },
+        {
+            "name": "金烁",
+            "pic": "./pics/jinshuo.jpg"
+        }
+    ]
+}
