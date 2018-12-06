@@ -1,16 +1,29 @@
 /**
  * 相关
  */
-function Sdj (container){
+function Sdj(container, userContainer ){
     this.container = container;
-    this.time = 10900;
-    this.users = [];
+    this.time = 100;
+    this.users = [];//所有人
+    this.prizeUser1 = [];//1等奖中奖人
+    this.prizeUser2 = [];//2等奖中奖人
+    this.prizeUser3 = [];//3等奖中奖人
+    this.lastUsr = [];//剩余人
+    this.config = {
+        level1: 1,
+        level2: 5,
+        level3: 10
+    }
+    this.level = 3;
+    this.isStart = false;
+    this.currentPrize = {};//当前中奖人
+    this.userContainer = userContainer;
 }
 
 Sdj.prototype.getData = function (){
     var _self = this;
 	$.get('/data',function(data){
-        _self.render(JSON.parse(data).data);
+        _self.render(data.data);
         _self.renderSlide();
         _self.users = data.data;
 	})
@@ -31,5 +44,75 @@ Sdj.prototype.render = function(data) {
  * @return {[type]} [description]
  */
 Sdj.prototype.renderSlide = function (data) {
-    this.container.EasySlides({ 'autoplay': true, 'show': 13, 'delayaftershow': 1, 'timeout': this.time }) 
+    // this.container.EasySlides({ 'autoplay': true, 'show': 13, 'delayaftershow': 1, 'timeout': this.time }) 
+    luck.init();
+    luck.EasySlidesNext(0)
+}
+/**
+ * 获取随机中奖人
+ */
+Sdj.prototype.getRound = function (data) {
+    var len = data.length;
+    var round = Math.floor(Math.random() * 100);
+    while(round > len){
+        //拿到随机数
+        round = Math.floor(Math.random() * 100)
+    }
+    return data[round];
+}
+/**
+ * 根据规则获取中奖人
+ */
+Sdj.prototype.getPrize = function () {
+    if (this.prizeUser3.length === this.config.level3) {
+        this.level = 2;
+    }
+    if (this.prizeUser2.length === this.config.level2) {
+        this.level = 1;
+    }
+    if (this.prizeUser1.length === this.config.level1){
+        return;
+    }
+    var user = this.getRound(this.users);
+    this.currentPrize = user;
+    if(this.level === 3 && this.prizeUser3.length < this.config.level3){
+        //获取三等奖
+        this.prizeUser3.push(user);
+        this.userContainer.append(
+            `<p>三等奖中奖人：<img src=${user.pic} />${user.name}</p>`
+        )
+    }
+    if (this.level === 2 && this.prizeUser2.length < this.config.level2) {
+        //获取三等奖 
+        this.prizeUser2.push(user); 
+        this.userContainer.append(
+            `<p>二等奖中奖人：<img src=${user.pic} />${user.name}</p>`
+        )
+    }
+    if (this.level === 1 && this.prizeUser1.length < this.config.level1) {
+        //获取三等奖 
+        this.prizeUser1.push(user);
+        this.userContainer.append(
+            `<p>一等奖中奖人：<img src=${user.pic} />${user.name}</p>`
+        )
+    }
+    this.deletePrize(user);
+}
+/**
+ * 获奖的人从数据中删除
+ */
+Sdj.prototype.deletePrize = function (user) {
+    this.users = this.users.filter((item)=>{
+        return item.key != user.key;
+    })
+}
+/**
+ * 开始轮播
+ * 抽奖
+ */
+Sdj.prototype.start = function () {
+    // if(this.isStart){return;}
+    this.getPrize();
+    this.isStart = !this.isStart; 
+    luck.setStart(this.isStart); 
 }

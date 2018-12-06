@@ -5,18 +5,28 @@
 <link href="./css/jquery.easy_slides.css" rel="stylesheet" type="text/css" />
 <script src="./js/min.js"></script>
 <script src="./js/jquery.easy_slides.js"></script>
+<script src="./js/luck.js"></script>
 <script src="./js/sdj.js"></script>
 </head>
-<body>  
- <div class="slider slider_circle_10">
+<body> 
+    <div class="apple">
+        <img src="images/apple.png" alt="" width="100%">
+    </div>
+    <div class="slider slider_circle_10">
 
- </div>
- <script>
-   $(document).ready(function() {
-   	var sdj = new  Sdj($('.slider_circle_10'));
-   	sdj.getData();
-    // $('.slider_circle_10').EasySlides({'autoplay': true, 'show': 13,'delayaftershow':1,'timeout':100}) 
-   });
- </script>
+    </div>
+    <input id="start" type="button" value="开始"/>
+    <div class="prizeUser">
+
+    </div>
+    <script>
+    $(document).ready(function() {
+        var sdj = new  Sdj($('.slider_circle_10'), $('.prizeUser'));
+        sdj.getData();
+        $('#start').click(function(params) {
+            sdj.start();
+        })
+    });
+    </script>
 </body>
 </html>
