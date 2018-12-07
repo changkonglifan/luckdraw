@@ -105,4 +105,4 @@ luck.EasySlidesNext = function (nextslide) {
 luck.setStart = function (isStart) {
     start = isStart;
     luck.EasySlidesNext();
-}
+} 

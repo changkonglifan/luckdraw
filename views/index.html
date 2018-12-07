@@ -17,12 +17,11 @@
     </div>
     <input id="start" type="button" value="开始"/>
     <div class="prizeUser">
-
     </div>
     <script>
     $(document).ready(function() {
         var sdj = new  Sdj($('.slider_circle_10'), $('.prizeUser'));
-        sdj.getData();
+        sdj.init();
         $('#start').click(function(params) {
             sdj.start();
         })

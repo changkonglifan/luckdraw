@@ -140,11 +140,11 @@
             "name": "龙君波",
             "pic": "./pics/longjunbo.jpg"
         },
-        // {
-        //     "key": 29,
-        //     "name": "马骥",
-        //     "pic": "./pics/maji.jpg"
-        // },
+        {
+            "key": 29,
+            "name": "马骥",
+            "pic": "./pics/maji.jpg"
+        },
         {
             "key": 30,
             "name": "马启航",
@@ -293,7 +293,7 @@
         {
             "key": 59,
             "name": "徐正",
-            "pic": "./pics/xuyang.jpg"
+            "pic": "./pics/xuzheng.jpg"
         },
         {
             "key": 60,
