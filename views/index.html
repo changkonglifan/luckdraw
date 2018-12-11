@@ -7,26 +7,46 @@
 <script src="./js/min.js"></script>
 <script src="./js/jquery.easy_slides.js"></script>
 <script src="./js/luck.js"></script>
-<script src="./js/sdj.js"></script>
+<script src="./js/sdj.js"></script> 
+<script src="./js/Stats.min.js"></script>
+<script src="./js/three.min.js"></script>
 </head>
 <body> 
-    <div class="top-slider">
-        <div class="apple">
-            <img src="images/apple.png" alt="" width="100%">
-        </div>
-        <div class="slider slider_circle_10">
-    
+    <div class="main">
+        <div class="top-slider">
+            <!-- 苹果 -->
+            <div class="apple">
+                <img src="images/apple.png" alt="" width="100%">
+            </div>
+            <!-- 跑马场列表 -->
+            <div class="slider slider_circle_10">
+        
+            </div>
+            <!-- 中奖后的背景 -->
+            <div class="prizeBg"></div>
+            <!-- 中奖后的名字 -->
+            <div class="prizeUser"></div>
+            <!-- 中奖后的遮罩层 -->
+            <div class="cover"></div>
+            <!-- 中奖后的星星 -->
+            <canvas id="canvas"></canvas>
+            
+            <div id="stats"></div>
         </div>
     </div>
-    <input id="start" type="button" value="开始"/>
-    <div class="prizeUser">
-    </div>
+    <script src="./js/star.js"></script>
     <script>
     $(document).ready(function() {
         var sdj = new  Sdj($('.slider_circle_10'), $('.prizeUser'));
         sdj.init();
-        $('#start').click(function(params) {
-            sdj.start();
+        // $('#start').click(function(params) {
+        //     sdj.start();
+        // })  
+        $(window).keydown((e)=>{
+             var ev = document.all ? window.event : e;
+            if (ev.keyCode == 13) {
+                sdj.start();
+            }
         })
     });
     </script>

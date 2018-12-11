@@ -2,7 +2,7 @@ var luck = {
 
 }
 var speed = 100;
-var show = 23;
+var show = 20;
 var this_slider = $('.slider');
 var cur_slide = 0;
 var mousedowned = false;
@@ -11,7 +11,7 @@ var EasySlidesCanChange = true;
 var slides ;
 var count = 0;
 var EasySlidesTimer;
-var start = false; 
+var start = true; 
 var cb ;
 var sdj ;
 luck.init = function (callback,sdjObj) {
@@ -32,6 +32,8 @@ luck.init = function (callback,sdjObj) {
     }
 } 
 luck.EasySlidesNext = function (nextslide) {
+    count = this_slider.children('*:not(.next_button, .prev_button, .nav_indicators)').length;
+    slides = this_slider.children('*:not(.next_button, .prev_button, .nav_indicators)');
     var i = 0;
     cb.call(sdj);
     if (count > 0) {
@@ -49,8 +51,10 @@ luck.EasySlidesNext = function (nextslide) {
         }
         while (nextslide < 0) {
             nextslide = nextslide + count;
+            console.log(nextslide + '<');
         }
         while (nextslide >= count) {
+            console.log(nextslide + '>');
             nextslide = nextslide - count;
         } 
         i = 0;
@@ -97,8 +101,7 @@ luck.EasySlidesNext = function (nextslide) {
     } 
 } 
 luck.setStart = function (isStart) {
-    start = isStart; 
-    // luck.EasySlidesNext();
+    start = isStart;  
 }
 /**
  * 设置速度
