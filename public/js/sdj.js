@@ -88,39 +88,39 @@ Sdj.prototype.getRound = function (data) {
  * 根据规则获取中奖人
  */
 Sdj.prototype.getPrize = function () {
-    if (this.prizeUser3.length === this.config.level3) {
-        this.level = 2;
-    }
-    if (this.prizeUser2.length === this.config.level2) {
-        this.level = 1;
-    }
-    if (this.prizeUser1.length === this.config.level1){
-        alert('抽奖已结束');
-        this.isEnd = true;
-        return;
-    }
+    // if (this.prizeUser3.length === this.config.level3) {
+    //     this.level = 2;
+    // }
+    // if (this.prizeUser2.length === this.config.level2) {
+    //     this.level = 1;
+    // }
+    // if (this.prizeUser1.length === this.config.level1){
+    //     alert('抽奖已结束');
+    //     this.isEnd = true;
+    //     return;
+    // }
     var user = this.getRound(this.lastUsr); 
-    if(this.level === 3 && this.prizeUser3.length < this.config.level3){
-        //获取三等奖
-        this.prizeUser3.push(user);
-    }
-    if (this.level === 2 && this.prizeUser2.length < this.config.level2) {
-        //获取二等奖 
-        this.prizeUser2.push(user); 
-    }
-    if (this.level === 1 && this.prizeUser1.length < this.config.level1) {
-        //获取一等奖
-        this.prizeUser1.push(user);
-    }
+    // if(this.level === 3 && this.prizeUser3.length < this.config.level3){
+    //     //获取三等奖
+    //     this.prizeUser3.push(user);
+    // }
+    // if (this.level === 2 && this.prizeUser2.length < this.config.level2) {
+    //     //获取二等奖 
+    //     this.prizeUser2.push(user); 
+    // }
+    // if (this.level === 1 && this.prizeUser1.length < this.config.level1) {
+    //     //获取一等奖
+    //     this.prizeUser1.push(user);
+    // }
+    console.log(`${user.name}`)
     return user;
 }
 /**
  * 写入列表
  */
-Sdj.prototype.renderPrizeList = function () {
-    var leveList = ['一','二','三'];
+Sdj.prototype.renderPrizeList = function () { 
     this.userContainer.text(
-        `${leveList[this.level - 1]}等奖：${this.currentPrize.name}`
+        `${this.currentPrize.name}`
     )
     this.showEffect(true);
 }
@@ -147,7 +147,7 @@ Sdj.prototype.resetLuck = function () {
     this.isStart = true;
     this.circleRun = 0;
     this.isSpeedDown = false;
-    luck.setStart(this.isStart);//重新开始跑 
+    luck.setStart(this.isStart,false);//重新开始跑 
     this.lastUsr = shuffleData(this.lastUsr);//打乱排序
     this.render(this.lastUsr);
     this.renderSlide();
@@ -197,11 +197,11 @@ Sdj.prototype.setData = function (data,user,lastTen) {
 }
 
 /**
- * 重新设置获取中奖人后的跑马场
+ * 重新设置获取中奖人后的跑马场 
  */
-Sdj.prototype.getAfterPrize = function (user) {
+Sdj.prototype.getAfterPrize = function () {
     var lastTen = $('div[class*=active],div[class*=next]').text();
-    var data = this.setData(shuffleData(this.lastUsr), user,lastTen);//之后的二十个数组
+    var data = this.setData(shuffleData(this.lastUsr), this.currentPrize,lastTen);//之后的二十个数组
     this.renderAfterPrize(data);
 }  
 
@@ -213,8 +213,10 @@ Sdj.prototype.renderAfterPrize = function (data) {
     data.forEach(element => {
         html += `<div class='hidden' key=${element.key}><img src=${element.pic} /> ${element.name} </div>`;
     });
-    console.log(`插入位置${$('.next9').index()} ${$('.next9').text()}  ${$('.active').text()}`);
     $(html).insertAfter($('.next9'));
+    this.isSpeedDown = true;//开始减速 
+    luck.setStart(true,false); 
+    luck.EasySlidesNext();
 }
 /**
  * 获取苹果下落时间
@@ -227,37 +229,32 @@ Sdj.prototype.renderAfterPrize = function (data) {
  * 800 8个 
  */
 Sdj.prototype.getAppleTimeout = function () {
-    var timeout = 200 * 5 + 400 * 5 + 600 * 5 + 800 * 8 + 5 * 100;
+    var timeout = 200 * 6 + 400 * 6 + 600 * 3 + 800 * 4 + 10 * 100;
     this.timeout = timeout;
 }
 /**
  * 跑马场跑圈回调
  */
-Sdj.prototype.circleCallback = function () {
-    if($('.next9').index() == 2){
-        this.start();
-    }
+Sdj.prototype.circleCallback = function () { 
     if (this.isSpeedDown){
-        if (this.circleRun === 5) {
+        if (this.circleRun === 10) {
             luck.setSpeed(200);
             this.setEase(0.2);
-        } else if (this.circleRun === 10) {
+        } else if (this.circleRun === 16) {
             luck.setSpeed(400);
             this.setEase(0.4);
-        } else if (this.circleRun === 15) {
+        } else if (this.circleRun === 22) {
             luck.setSpeed(600);
             this.setEase(0.6);
-        } else if (this.circleRun === 20) {
+        } else if (this.circleRun === 25) {
             luck.setSpeed(800);
             this.setEase(0.8);
-        } else if (this.currentPrize.key + '' == $('.next1').attr('key').trim() && this.circleRun > 20) {
-            //29个结束 
-            console.log(this.circleRun);
+        } else if (this.currentPrize.key + '' == $('.next1').attr('key').trim() && this.circleRun > 25) {
+            //28个结束  
             this.resetSdj(); 
         }
         if (this.circleRun >= 28) {
-            debugger;
-            console.log(this.currentPrize.key + this.currentPrize.name + '--------------'  + $('.next1').attr('key').trim());
+            console.error('bug了');
         }
         this.circleRun ++;
     }
@@ -273,7 +270,7 @@ Sdj.prototype.setEase = function (spd) {
  */
 Sdj.prototype.resetSdj = function (params) {
     this.isStart = false;
-    luck.setStart(this.isStart);
+    luck.setStart(this.isStart,false);
     this.circleRun = 0;//还原计数器
     setTimeout(() => {
         this.renderPrizeList();//写入获奖列表
@@ -296,14 +293,10 @@ Sdj.prototype.resetSdj = function (params) {
 Sdj.prototype.start = function () {
     if (this.isSpeedDown) { return; } 
     this.getAppleDown();//开始苹果下落 
-    var user = this.getPrize();//拿到中奖人
-    this.currentPrize = user;
-    if (!this.isEnd){  
-        this.isStart = !this.isStart;
-        luck.setStart(this.isStart);
-        this.getAfterPrize(user);
-        this.isSpeedDown = true;//开始减速
-        this.isStart = !this.isStart;
-        luck.setStart(this.isStart); 
+    this.currentPrize = this.getPrize();//拿到中奖人
+    if (!this.isEnd){   
+        luck.setStart(false,true); 
+        // this.getAfterPrize();
+        
     }
 }

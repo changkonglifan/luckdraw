@@ -14,6 +14,7 @@ var EasySlidesTimer;
 var start = true; 
 var cb ;
 var sdj ;
+var isReRender = false;//是否重新渲染
 luck.init = function (callback,sdjObj) {
     this_slider = $('.slider');
     count = this_slider.children('*:not(.next_button, .prev_button, .nav_indicators)').length;
@@ -34,15 +35,16 @@ luck.init = function (callback,sdjObj) {
 luck.EasySlidesNext = function (nextslide) {
     count = this_slider.children('*:not(.next_button, .prev_button, .nav_indicators)').length;
     slides = this_slider.children('*:not(.next_button, .prev_button, .nav_indicators)');
+    cur_slide = $('.active').index();
     var i = 0;
     cb.call(sdj);
     if (count > 0) {
-        if (typeof nextslide == 'number') {
-            cur_slide = nextslide;
-        } else {
+        // if (typeof nextslide == 'number') {
+        //     cur_slide = nextslide;
+        // } else {
             cur_slide++;
             nextslide = cur_slide;
-        }
+        // }
         while (cur_slide < 0) {
             cur_slide = cur_slide + count;
         }
@@ -51,10 +53,8 @@ luck.EasySlidesNext = function (nextslide) {
         }
         while (nextslide < 0) {
             nextslide = nextslide + count;
-            console.log(nextslide + '<');
         }
         while (nextslide >= count) {
-            console.log(nextslide + '>');
             nextslide = nextslide - count;
         } 
         i = 0;
@@ -96,12 +96,15 @@ luck.EasySlidesNext = function (nextslide) {
         EasySlidesTimer = setTimeout(function () {
             if (start){
                 luck.EasySlidesNext();
+            } else if (!start && isReRender){
+                sdj.getAfterPrize();
             }
         }, speed);
     } 
 } 
-luck.setStart = function (isStart) {
+luck.setStart = function (isStart, flg) {
     start = isStart;  
+    isReRender = flg; 
 }
 /**
  * 设置速度
